@@ -15,7 +15,8 @@ type ImageConfig struct {
 	ImageMetadata   map[string]string            `mapstructure:"metadata"`
 	ImageVisibility imageservice.ImageVisibility `mapstructure:"image_visibility"`
 	ImageMembers    []string                     `mapstructure:"image_members"`
-	ImageDiskFormat string                       `mapstructure:"image_disk_format"`
+	// Disk format of the resulting image. This option works if use_blockstorage_volume is true.
+	ImageDiskFormat string                       `mapstructure:"image_disk_format" required:"false"`
 	ImageTags       []string                     `mapstructure:"image_tags"`
 }
 

@@ -33,38 +33,53 @@ type Config struct {
 	common.PackerConfig `mapstructure:",squash"`
 	Comm                communicator.Config `mapstructure:",squash"`
 
-	APIURL     string `mapstructure:"api_url"`
+	// Custom API endpoint URL, compatible with HyperOne. It can also be specified via environment variable HYPERONE_API_URL.
+
+	APIURL     string `mapstructure:"api_url" required:"false"`
 	// The authentication token used to access your account. This can be either a session token or a service account token. If not defined, the builder will attempt to find it in the following order:
 	Token      string `mapstructure:"token" required:"true"`
 	// The id or name of the project. This field is required only if using session tokens. It should be skipped when using service account authentication.
 	Project    string `mapstructure:"project" required:"true"`
-	TokenLogin string `mapstructure:"token_login"`
+	// Login (an e-mail) on HyperOne platform. Set this if you want to fetch the token by SSH authentication.
+	TokenLogin string `mapstructure:"token_login" required:"false"`
 
 	StateTimeout time.Duration `mapstructure:"state_timeout"`
 
 	// ID or name of the image to launch server from.
 
 	SourceImage      string                 `mapstructure:"source_image" required:"true"`
-	ImageName        string                 `mapstructure:"image_name"`
-	ImageDescription string                 `mapstructure:"image_description"`
+	// The name of the resulting image. Defaults to "packer-{{timestamp}}" (see configuration templates for more info).
+	ImageName        string                 `mapstructure:"image_name" required:"false"`
+	// The description of the resulting image.
+	ImageDescription string                 `mapstructure:"image_description" required:"false"`
 	ImageTags        map[string]interface{} `mapstructure:"image_tags"`
-	ImageService     string                 `mapstructure:"image_service"`
+	// The service of the resulting image.
+	ImageService     string                 `mapstructure:"image_service" required:"false"`
 
 	// ID or name of the type this server should be created with.
 
 	VmType string                 `mapstructure:"vm_type" required:"true"`
-	VmName string                 `mapstructure:"vm_name"`
+	// The name of the created server.
+	VmName string                 `mapstructure:"vm_name" required:"false"`
 	VmTags map[string]interface{} `mapstructure:"vm_tags"`
 
-	DiskName string  `mapstructure:"disk_name"`
-	DiskType string  `mapstructure:"disk_type"`
+	// The name of the created disk.
+
+	DiskName string  `mapstructure:"disk_name" required:"false"`
+	// The type of the created disk. Defaults to ssd.
+	DiskType string  `mapstructure:"disk_type" required:"false"`
 	// Size of the created disk, in GiB.
 	DiskSize float32 `mapstructure:"disk_size" required:"true"`
 
-	Network             string `mapstructure:"network"`
-	PrivateIP           string `mapstructure:"private_ip"`
-	PublicIP            string `mapstructure:"public_ip"`
-	PublicNetAdpService string `mapstructure:"public_netadp_service"`
+	// The ID of the network to attach to the created server.
+
+	Network             string `mapstructure:"network" required:"false"`
+	// The ID of the private IP within chosen network that should be assigned to the created server.
+	PrivateIP           string `mapstructure:"private_ip" required:"false"`
+	// The ID of the public IP that should be assigned to the created server. If network is chosen, the public IP will be associated with server's private IP.
+	PublicIP            string `mapstructure:"public_ip" required:"false"`
+	// Custom service of public network adapter. Can be useful when using custom api_url. Defaults to public.
+	PublicNetAdpService string `mapstructure:"public_netadp_service" required:"false"`
 
 	ChrootDisk           bool       `mapstructure:"chroot_disk"`
 	ChrootDiskSize       float32    `mapstructure:"chroot_disk_size"`
@@ -80,7 +95,8 @@ type Config struct {
 	PostMountCommands []string `mapstructure:"post_mount_commands"`
 
 	SSHKeys  []string `mapstructure:"ssh_keys"`
-	UserData string   `mapstructure:"user_data"`
+	// User data to launch with the server. Packer will not automatically wait for a user script to finish before shutting down the instance, this must be handled in a provisioner.
+	UserData string   `mapstructure:"user_data" required:"false"`
 
 	ctx interpolate.Context
 }

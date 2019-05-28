@@ -30,7 +30,8 @@ type Config struct {
 
 	RootDevice    RootBlockDevice  `mapstructure:"ami_root_device" required:"true"`
 	VolumeRunTags awscommon.TagMap `mapstructure:"run_volume_tags"`
-	Architecture  string           `mapstructure:"ami_architecture"`
+	// what architecture to use when registering the final AMI; valid options are "x86_64" or "arm64". Defaults to "x86_64".
+	Architecture  string           `mapstructure:"ami_architecture" required:"false" required:"false"`
 
 	ctx interpolate.Context
 }

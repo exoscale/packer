@@ -16,10 +16,14 @@ type Config struct {
 	common.PackerConfig `mapstructure:",squash"`
 	// The path to the lxc configuration file.
 	ConfigFile          string   `mapstructure:"config_file" required:"true"`
-	OutputDir           string   `mapstructure:"output_directory"`
-	ContainerName       string   `mapstructure:"container_name"`
-	CommandWrapper      string   `mapstructure:"command_wrapper"`
-	RawInitTimeout      string   `mapstructure:"init_timeout"`
+	// The directory in which to save the exported tar.gz. Defaults to output-<BuildName> in the current directory.
+	OutputDir           string   `mapstructure:"output_directory" required:"false"`
+	// The name of the LXC container. Usually stored in /var/lib/lxc/containers/<container_name>. Defaults to packer-<BuildName>.
+	ContainerName       string   `mapstructure:"container_name" required:"false"`
+	// Allows you to specify a wrapper command, such as ssh so you can execute packer builds on a remote host. Defaults to Empty.
+	CommandWrapper      string   `mapstructure:"command_wrapper" required:"false"`
+	// The timeout in seconds to wait for the the container to start. Defaults to 20 seconds.
+	RawInitTimeout      string   `mapstructure:"init_timeout" required:"false"`
 	CreateOptions       []string `mapstructure:"create_options"`
 	StartOptions        []string `mapstructure:"start_options"`
 	AttachOptions       []string `mapstructure:"attach_options"`
@@ -27,7 +31,8 @@ type Config struct {
 	Name                string   `mapstructure:"template_name" required:"true"`
 	Parameters          []string `mapstructure:"template_parameters"`
 	EnvVars             []string `mapstructure:"template_environment_vars"`
-	TargetRunlevel      int      `mapstructure:"target_runlevel"`
+	// The minimum run level to wait for the container to reach. Note some distributions (Ubuntu) simulate run levels and may report 5 rather than 3.
+	TargetRunlevel      int      `mapstructure:"target_runlevel" required:"false"`
 	InitTimeout         time.Duration
 
 	ctx interpolate.Context

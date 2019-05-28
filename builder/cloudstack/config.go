@@ -28,45 +28,69 @@ type Config struct {
 	// The secret key used to sign all API requests. It can also be specified via environment variable CLOUDSTACK_SECRET_KEY, if set.
 	SecretKey    string        `mapstructure:"secret_key" required:"true"`
 	AsyncTimeout time.Duration `mapstructure:"async_timeout"`
-	HTTPGetOnly  bool          `mapstructure:"http_get_only"`
-	SSLNoVerify  bool          `mapstructure:"ssl_no_verify"`
+	// Some cloud providers only allow HTTP GET calls to their CloudStack API. If using such a provider, you need to set this to true in order for the provider to only make GET calls and no POST calls.
+	HTTPGetOnly  bool          `mapstructure:"http_get_only" required:"false"`
+	// Set to true to skip SSL verification. Defaults to false.
+	SSLNoVerify  bool          `mapstructure:"ssl_no_verify" required:"false"`
 
 	CIDRList               []string `mapstructure:"cidr_list"`
-	CreateSecurityGroup    bool     `mapstructure:"create_security_group"`
-	DiskOffering           string   `mapstructure:"disk_offering"`
-	DiskSize               int64    `mapstructure:"disk_size"`
-	Expunge                bool     `mapstructure:"expunge"`
-	Hypervisor             string   `mapstructure:"hypervisor"`
-	InstanceName           string   `mapstructure:"instance_name"`
+	// If true a temporary security group will be created which allows traffic towards the instance from the cidr_list. This option will be ignored if security_groups is also defined. Requires expunge set to true. Defaults to false.
+	CreateSecurityGroup    bool     `mapstructure:"create_security_group" required:"false"`
+	// The name or ID of the disk offering used for the instance. This option is only available (and also required) when using source_iso.
+	DiskOffering           string   `mapstructure:"disk_offering" required:"false"`
+	// The size (in GB) of the root disk of the new instance. This option is only available when using source_template.
+	DiskSize               int64    `mapstructure:"disk_size" required:"false"`
+	// Set to true to expunge the instance when it is destroyed. Defaults to false.
+	Expunge                bool     `mapstructure:"expunge" required:"false"`
+	// The target hypervisor (e.g. XenServer, KVM) for the new template. This option is required when using source_iso.
+	Hypervisor             string   `mapstructure:"hypervisor" required:"false"`
+	// The name of the instance. Defaults to "packer-UUID" where UUID is dynamically generated.
+	InstanceName           string   `mapstructure:"instance_name" required:"false"`
 	// The name or ID of the network to connect the instance to.
 	Network                string   `mapstructure:"network" required:"true"`
-	Project                string   `mapstructure:"project"`
-	PublicIPAddress        string   `mapstructure:"public_ip_address"`
-	PublicPort             int      `mapstructure:"public_port"`
+	// The name or ID of the project to deploy the instance to.
+	Project                string   `mapstructure:"project" required:"false"`
+	// The public IP address or it's ID used for connecting any provisioners to. If not provided, a temporary public IP address will be associated and released during the Packer run.
+	PublicIPAddress        string   `mapstructure:"public_ip_address" required:"false"`
+	// The fixed port you want to configure in the port forwarding rule. Set this attribute if you do not want to use the a random public port.
+	PublicPort             int      `mapstructure:"public_port" required:"false"`
 	SecurityGroups         []string `mapstructure:"security_groups"`
 	// The name or ID of the service offering used for the instance.
 	ServiceOffering        string   `mapstructure:"service_offering" required:"true"`
-	PreventFirewallChanges bool     `mapstructure:"prevent_firewall_changes"`
+	// Set to true to prevent network ACLs or firewall rules creation. Defaults to false.
+	PreventFirewallChanges bool     `mapstructure:"prevent_firewall_changes" required:"false"`
 	// The name or ID of an ISO that will be mounted before booting the instance. This option is mutually exclusive with source_template. When using source_iso, both disk_offering and hypervisor are required.
 	SourceISO              string   `mapstructure:"source_iso" required:"true"`
 	// The name or ID of the template used as base template for the instance. This option is mutually exclusive with source_iso.
 	SourceTemplate         string   `mapstructure:"source_template" required:"true"`
-	TemporaryKeypairName   string   `mapstructure:"temporary_keypair_name"`
-	UseLocalIPAddress      bool     `mapstructure:"use_local_ip_address"`
-	UserData               string   `mapstructure:"user_data"`
-	UserDataFile           string   `mapstructure:"user_data_file"`
+	// The name of the temporary SSH key pair to generate. By default, Packer generates a name that looks like packer_<UUID>, where <UUID> is a 36 character unique identifier.
+	TemporaryKeypairName   string   `mapstructure:"temporary_keypair_name" required:"false"`
+	// Set to true to indicate that the provisioners should connect to the local IP address of the instance.
+	UseLocalIPAddress      bool     `mapstructure:"use_local_ip_address" required:"false"`
+	// User data to launch with the instance. This is a template engine see User Data bellow for more details. Packer will not automatically wait for a user script to finish before shutting down the instance this must be handled in a provisioner.
+	UserData               string   `mapstructure:"user_data" required:"false"`
+	// Path to a file that will be used for the user data when launching the instance. This file will be parsed as a template engine see User Data bellow for more details.
+	UserDataFile           string   `mapstructure:"user_data_file" required:"false"`
 	// The name or ID of the zone where the instance will be created.
 	Zone                   string   `mapstructure:"zone" required:"true"`
 
-	TemplateName            string `mapstructure:"template_name"`
-	TemplateDisplayText     string `mapstructure:"template_display_text"`
+	// The name of the new template. Defaults to "packer-{{timestamp}}" where timestamp will be the current time.
+
+	TemplateName            string `mapstructure:"template_name" required:"false"`
+	// The display text of the new template. Defaults to the template_name.
+	TemplateDisplayText     string `mapstructure:"template_display_text" required:"false"`
 	// The name or ID of the template OS for the new template that will be created.
 	TemplateOS              string `mapstructure:"template_os" required:"true"`
-	TemplateFeatured        bool   `mapstructure:"template_featured"`
-	TemplatePublic          bool   `mapstructure:"template_public"`
-	TemplatePasswordEnabled bool   `mapstructure:"template_password_enabled"`
-	TemplateRequiresHVM     bool   `mapstructure:"template_requires_hvm"`
-	TemplateScalable        bool   `mapstructure:"template_scalable"`
+	// Set to true to indicate that the template is featured. Defaults to false.
+	TemplateFeatured        bool   `mapstructure:"template_featured" required:"false"`
+	// Set to true to indicate that the template is available for all accounts. Defaults to false.
+	TemplatePublic          bool   `mapstructure:"template_public" required:"false"`
+	// Set to true to indicate the template should be password enabled. Defaults to false.
+	TemplatePasswordEnabled bool   `mapstructure:"template_password_enabled" required:"false"`
+	// Set to true to indicate the template requires hardware-assisted virtualization. Defaults to false.
+	TemplateRequiresHVM     bool   `mapstructure:"template_requires_hvm" required:"false"`
+	// Set to true to indicate that the template contains tools to support dynamic scaling of VM cpu/memory. Defaults to false.
+	TemplateScalable        bool   `mapstructure:"template_scalable" required:"false"`
 	TemplateTag             string `mapstructure:"template_tag"`
 
 	ctx interpolate.Context

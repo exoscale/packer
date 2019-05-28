@@ -10,11 +10,11 @@ import (
 )
 
 type HWConfig struct {
-
-	// cpu information
-	CpuCount   int `mapstructure:"cpus"`
+	// The number of cpus to use when building the VM.
+	CpuCount   int `mapstructure:"cpus" required:"false"`
 	MemorySize int `mapstructure:"memory"`
-	CoreCount  int `mapstructure:"cores"`
+	// The number of cores per socket to use when building the VM. This corresponds to the cpuid.coresPerSocket option in the .vmx file.
+	CoreCount  int `mapstructure:"cores" required:"false"`
 
 	// network type and adapter
 	Network            string `mapstructure:"network"`

@@ -7,7 +7,8 @@ import (
 )
 
 type ExportConfig struct {
-	Format string `mapstructure:"format"`
+	// Either ovf or ova, this specifies the output format of the exported virtual machine. This defaults to ovf.
+	Format string `mapstructure:"format" required:"false" required:"false"`
 }
 
 func (c *ExportConfig) Prepare(ctx *interpolate.Context) []error {

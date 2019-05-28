@@ -14,17 +14,27 @@ import (
 )
 
 type DriverConfig struct {
-	FusionAppPath           string `mapstructure:"fusion_app_path"`
-	RemoteType              string `mapstructure:"remote_type"`
-	RemoteDatastore         string `mapstructure:"remote_datastore"`
-	RemoteCacheDatastore    string `mapstructure:"remote_cache_datastore"`
-	RemoteCacheDirectory    string `mapstructure:"remote_cache_directory"`
-	RemoteHost              string `mapstructure:"remote_host"`
+	// Path to "VMware Fusion.app". By default this is /Applications/VMware Fusion.app but this setting allows you to customize this.
+	FusionAppPath           string `mapstructure:"fusion_app_path" required:"false"`
+	// The type of remote machine that will be used to build this VM rather than a local desktop product. The only value accepted for this currently is "esx5". If this is not set, a desktop product will be used. By default, this is not set.
+	RemoteType              string `mapstructure:"remote_type" required:"false"`
+	// The path to the datastore where the resulting VM will be stored when it is built on the remote machine. By default this is "datastore1". This only has an effect if remote_type is enabled.
+	RemoteDatastore         string `mapstructure:"remote_datastore" required:"false"`
+	// The path to the datastore where supporting files will be stored during the build on the remote machine. By default this is the same as the remote_datastore option. This only has an effect if remote_type is enabled.
+	RemoteCacheDatastore    string `mapstructure:"remote_cache_datastore" required:"false"`
+	// The path where the ISO and/or floppy files will be stored during the build on the remote machine. The path is relative to the remote_cache_datastore on the remote machine. By default this is "packer_cache". This only has an effect if remote_type is enabled.
+	RemoteCacheDirectory    string `mapstructure:"remote_cache_directory" required:"false"`
+	// The host of the remote machine used for access. This is only required if remote_type is enabled.
+	RemoteHost              string `mapstructure:"remote_host" required:"false"`
 	RemotePort              int    `mapstructure:"remote_port"`
-	RemoteUser              string `mapstructure:"remote_username"`
-	RemotePassword          string `mapstructure:"remote_password"`
-	RemotePrivateKey        string `mapstructure:"remote_private_key_file"`
-	SkipValidateCredentials bool   `mapstructure:"skip_validate_credentials"`
+	// The username for the SSH user that will access the remote machine. This is required if remote_type is enabled.
+	RemoteUser              string `mapstructure:"remote_username" required:"false"`
+	// The SSH password for the user used to access the remote machine. By default this is empty. This only has an effect if remote_type is enabled.
+	RemotePassword          string `mapstructure:"remote_password" required:"false"`
+	// The path to the PEM encoded private key file for the user used to access the remote machine. By default this is empty. This only has an effect if remote_type is enabled.
+	RemotePrivateKey        string `mapstructure:"remote_private_key_file" required:"false"`
+	// When Packer is preparing to run a remote esxi build, and export is not disable, by default it runs a no-op ovftool command to make sure that the remote_username and remote_password given are valid. If you set this flag to true, Packer will skip this validation. Default: false.
+	SkipValidateCredentials bool   `mapstructure:"skip_validate_credentials" required:"false"`
 }
 
 func (c *DriverConfig) Prepare(ctx *interpolate.Context) []error {

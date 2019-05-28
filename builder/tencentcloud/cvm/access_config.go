@@ -52,7 +52,8 @@ type TencentCloudAccessConfig struct {
 	Region         string `mapstructure:"region" required:"true"`
 	// The zone where your cvm will be launch. You should reference Region and Zone  for parameter taking.
 	Zone           string `mapstructure:"zone" required:"true"`
-	SkipValidation bool   `mapstructure:"skip_region_validation"`
+	// Do not check region and zone when validate.
+	SkipValidation bool   `mapstructure:"skip_region_validation" required:"false"`
 }
 
 func (cf *TencentCloudAccessConfig) Client() (*cvm.Client, *vpc.Client, error) {

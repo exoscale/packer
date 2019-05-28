@@ -13,9 +13,12 @@ type TargetImageConfig struct {
 	ImageName        string            `mapstructure:"image_name" required:"true"`
 	// The version string for this image. Maximum 128 characters. Any string will do but a format of Major.Minor.Patch is strongly advised by Joyent. See Semantic Versioning for more information on the Major.Minor.Patch versioning format.
 	ImageVersion     string            `mapstructure:"image_version" required:"true"`
-	ImageDescription string            `mapstructure:"image_description"`
-	ImageHomepage    string            `mapstructure:"image_homepage"`
-	ImageEULA        string            `mapstructure:"image_eula_url"`
+	// Description of the image. Maximum 512 characters.
+	ImageDescription string            `mapstructure:"image_description" required:"false"`
+	// URL of the homepage where users can find information about the image. Maximum 128 characters.
+	ImageHomepage    string            `mapstructure:"image_homepage" required:"false"`
+	// URL of the End User License Agreement (EULA) for the image. Maximum 128 characters.
+	ImageEULA        string            `mapstructure:"image_eula_url" required:"false"`
 	ImageACL         []string          `mapstructure:"image_acls"`
 	ImageTags        map[string]string `mapstructure:"image_tags"`
 }

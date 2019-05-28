@@ -12,22 +12,28 @@ import (
 type AMIConfig struct {
 	// The name of the resulting AMI that will appear when managing AMIs in the AWS console or via APIs. This must be unique. To help make this unique, use a function like timestamp (see template engine for more info).
 	AMIName                 string            `mapstructure:"ami_name" required:"true"`
-	AMIDescription          string            `mapstructure:"ami_description"`
-	AMIVirtType             string            `mapstructure:"ami_virtualization_type"`
+	// The description to set for the resulting AMI(s). By default this description is empty. This is a template engine, see Build template data for more information.
+	AMIDescription          string            `mapstructure:"ami_description" required:"false" required:"false" required:"false" required:"false"`
+	// The type of virtualization for the AMI you are building. This option is required to register HVM images. Can be paravirtual (default) or hvm.
+	AMIVirtType             string            `mapstructure:"ami_virtualization_type" required:"false" required:"false" required:"false" required:"false"`
 	AMIUsers                []string          `mapstructure:"ami_users"`
 	AMIGroups               []string          `mapstructure:"ami_groups"`
 	AMIProductCodes         []string          `mapstructure:"ami_product_codes"`
 	AMIRegions              []string          `mapstructure:"ami_regions"`
-	AMISkipRegionValidation bool              `mapstructure:"skip_region_validation"`
+	// Set to true if you want to skip validation of the region configuration option. Defaults to false.
+	AMISkipRegionValidation bool              `mapstructure:"skip_region_validation" required:"false" required:"false"`
 	AMITags                 TagMap            `mapstructure:"tags"`
 	AMIENASupport           *bool             `mapstructure:"ena_support"`
 	AMISriovNetSupport      bool              `mapstructure:"sriov_support"`
-	AMIForceDeregister      bool              `mapstructure:"force_deregister"`
-	AMIForceDeleteSnapshot  bool              `mapstructure:"force_delete_snapshot"`
+	// Force Packer to first deregister an existing AMI if one with the same name already exists. Default false.
+	AMIForceDeregister      bool              `mapstructure:"force_deregister" required:"false" required:"false" required:"false" required:"false"`
+	// Force Packer to delete snapshots associated with AMIs, which have been deregistered by force_deregister. Default false.
+	AMIForceDeleteSnapshot  bool              `mapstructure:"force_delete_snapshot" required:"false" required:"false" required:"false" required:"false"`
 	AMIEncryptBootVolume    *bool             `mapstructure:"encrypt_boot"`
 	AMIKmsKeyId             string            `mapstructure:"kms_key_id"`
 	AMIRegionKMSKeyIDs      map[string]string `mapstructure:"region_kms_key_ids"`
-	SnapshotTags            TagMap            `mapstructure:"snapshot_tags"`
+	// Tags to apply to snapshot. They will override AMI tags if already applied to snapshot.
+	SnapshotTags            TagMap            `mapstructure:"snapshot_tags" required:"false"`
 	SnapshotUsers           []string          `mapstructure:"snapshot_users"`
 	SnapshotGroups          []string          `mapstructure:"snapshot_groups"`
 }

@@ -58,23 +58,34 @@ func (d *SecurityGroupFilterOptions) Empty() bool {
 // RunConfig contains configuration for running an instance from a source
 // AMI and details on how to access that launched image.
 type RunConfig struct {
-	AssociatePublicIpAddress          bool                       `mapstructure:"associate_public_ip_address"`
-	AvailabilityZone                  string                     `mapstructure:"availability_zone"`
-	BlockDurationMinutes              int64                      `mapstructure:"block_duration_minutes"`
-	DisableStopInstance               bool                       `mapstructure:"disable_stop_instance"`
-	EbsOptimized                      bool                       `mapstructure:"ebs_optimized"`
-	EnableT2Unlimited                 bool                       `mapstructure:"enable_t2_unlimited"`
-	IamInstanceProfile                string                     `mapstructure:"iam_instance_profile"`
-	InstanceInitiatedShutdownBehavior string                     `mapstructure:"shutdown_behavior"`
+	// If using a non-default VPC, public IP addresses are not provided by default. If this is true, your new instance will get a Public IP. default: false
+	AssociatePublicIpAddress          bool                       `mapstructure:"associate_public_ip_address" required:"false" required:"false" required:"false" required:"false"`
+	// Destination availability zone to launch instance in. Leave this empty to allow Amazon to auto-assign.
+	AvailabilityZone                  string                     `mapstructure:"availability_zone" required:"false" required:"false" required:"false" required:"false"`
+	// Requires spot_price to be set. The required duration for the Spot Instances (also known as Spot blocks). This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360). You can't specify an Availability Zone group or a launch group if you specify a duration.
+	BlockDurationMinutes              int64                      `mapstructure:"block_duration_minutes" required:"false" required:"false" required:"false" required:"false"`
+	// Packer normally stops the build instance after all provisioners have run. For Windows instances, it is sometimes desirable to run Sysprep which will stop the instance for you. If this is set to true, Packer will not stop the instance but will assume that you will send the stop signal yourself through your final provisioner. You can do this with a windows-shell provisioner.
+	DisableStopInstance               bool                       `mapstructure:"disable_stop_instance" required:"false" required:"false" required:"false"`
+	// Mark instance as EBS Optimized. Default false.
+	EbsOptimized                      bool                       `mapstructure:"ebs_optimized" required:"false" required:"false" required:"false" required:"false"`
+	// Enabling T2 Unlimited allows the source instance to burst additional CPU beyond its available CPU Credits for as long as the demand exists. This is in contrast to the standard configuration that only allows an instance to consume up to its available CPU Credits. See the AWS documentation for T2 Unlimited and the T2 Unlimited Pricing section of the Amazon EC2 On-Demand Pricing document for more information. By default this option is disabled and Packer will set up a T2 Standard instance instead.
+	EnableT2Unlimited                 bool                       `mapstructure:"enable_t2_unlimited" required:"false" required:"false" required:"false" required:"false"`
+	// The name of an IAM instance profile to launch the EC2 instance with.
+	IamInstanceProfile                string                     `mapstructure:"iam_instance_profile" required:"false" required:"false"`
+	// Automatically terminate instances on shutdown in case Packer exits ungracefully. Possible values are stop and terminate. Defaults to stop.
+	InstanceInitiatedShutdownBehavior string                     `mapstructure:"shutdown_behavior" required:"false"`
 	// The EC2 instance type to use while building the AMI, such as t2.small.
 	InstanceType                      string                     `mapstructure:"instance_type" required:"true"`
-	SecurityGroupFilter               SecurityGroupFilterOptions `mapstructure:"security_group_filter"`
+	// Filters used to populate the security_group_ids field. Example:
+	SecurityGroupFilter               SecurityGroupFilterOptions `mapstructure:"security_group_filter" required:"false" required:"false"`
 	RunTags                           map[string]string          `mapstructure:"run_tags"`
-	SecurityGroupId                   string                     `mapstructure:"security_group_id"`
+	// The ID (not the name) of the security group to assign to the instance. By default this is not set and Packer will automatically create a new temporary security group to allow SSH access. Note that if this is specified, you must be sure the security group allows access to the ssh_port given below.
+	SecurityGroupId                   string                     `mapstructure:"security_group_id" required:"false" required:"false"`
 	SecurityGroupIds                  []string                   `mapstructure:"security_group_ids"`
 	// The source AMI whose root volume will be copied and provisioned on the currently running instance. This must be an EBS-backed AMI with a root volume snapshot that you have access to. Note: this is not used when from_scratch is set to true.
 	SourceAmi                         string                     `mapstructure:"source_ami" required:"true"`
-	SourceAmiFilter                   AmiFilterOptions           `mapstructure:"source_ami_filter"`
+	// Filters used to populate the source_ami field. Example:
+	SourceAmiFilter                   AmiFilterOptions           `mapstructure:"source_ami_filter" required:"false" required:"false"`
 	SpotInstanceTypes                 []string                   `mapstructure:"spot_instance_types"`
 	SpotPrice                         string                     `mapstructure:"spot_price"`
 	SpotPriceAutoProduct              string                     `mapstructure:"spot_price_auto_product"`

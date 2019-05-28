@@ -32,19 +32,23 @@ type Config struct {
 
 	// disk drives
 	AdditionalDiskSize []uint `mapstructure:"disk_additional_size"`
-	DiskAdapterType    string `mapstructure:"disk_adapter_type"`
+	// The adapter type of the VMware virtual disk to create. This option is for advanced usage, modify only if you know what you're doing. Some of the options you can specify are ide, sata, nvme or scsi (which uses the "lsilogic" scsi interface by default). If you specify another option, Packer will assume that you're specifying a scsi interface of that specified type. For more information, please consult the  Virtual Disk Manager User's Guide for desktop VMware clients. For ESXi, refer to the proper ESXi documentation.
+	DiskAdapterType    string `mapstructure:"disk_adapter_type" required:"false"`
 	DiskName           string `mapstructure:"vmdk_name"`
-	DiskSize           uint   `mapstructure:"disk_size"`
-	DiskTypeId         string `mapstructure:"disk_type_id"`
-	Format             string `mapstructure:"format"`
-
-	// cdrom drive
-	CdromAdapterType string `mapstructure:"cdrom_adapter_type"`
+	// The size of the hard disk for the VM in megabytes. The builder uses expandable, not fixed-size virtual hard disks, so the actual file representing the disk will not use the full size unless it is full. By default this is set to 40000 (about 40 GB).
+	DiskSize           uint   `mapstructure:"disk_size" required:"false"`
+	// The type of VMware virtual disk to create. This option is for advanced usage.
+	DiskTypeId         string `mapstructure:"disk_type_id" required:"false"`
+	// Either "ovf", "ova" or "vmx", this specifies the output format of the exported virtual machine. This defaults to "ovf". Before using this option, you need to install ovftool.
+	Format             string `mapstructure:"format" required:"false"`
+	// The adapter type (or bus) that will be used by the cdrom device. This is chosen by default based on the disk adapter type. VMware tends to lean towards ide for the cdrom device unless sata is chosen for the disk adapter and so Packer attempts to mirror this logic. This field can be specified as either ide, sata, or scsi.
+	CdromAdapterType string `mapstructure:"cdrom_adapter_type" required:"false"`
 
 	// platform information
 	GuestOSType string `mapstructure:"guest_os_type"`
 	Version     string `mapstructure:"version"`
-	VMName      string `mapstructure:"vm_name"`
+	// This is the name of the VMX file for the new virtual machine, without the file extension. By default this is packer-BUILDNAME, where "BUILDNAME" is the name of the build.
+	VMName      string `mapstructure:"vm_name" required:"false"`
 
 	VMXDiskTemplatePath string `mapstructure:"vmx_disk_template_path"`
 	VMXTemplatePath     string `mapstructure:"vmx_template_path"`

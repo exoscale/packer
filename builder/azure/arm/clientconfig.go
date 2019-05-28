@@ -14,9 +14,10 @@ import (
 
 // ClientConfig allows for various ways to authenticate Azure clients
 type ClientConfig struct {
-	// Describes where API's are
 
-	CloudEnvironmentName string `mapstructure:"cloud_environment_name"`
+	//oud_environment_name (string) One of Public, China, Germany, or USGovernment. Defaults to Public. Long forms such as USGovernmentCloud and AzureUSGovernmentCloud are also supported.
+
+	CloudEnvironmentName string `mapstructure:"cloud_environment_name" required:"false"`
 	cloudEnvironment     *azure.Environment
 
 	// Authentication fields

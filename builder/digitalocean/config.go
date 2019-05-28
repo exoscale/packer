@@ -23,7 +23,8 @@ type Config struct {
 	// The client TOKEN to use to access your account. It can also be specified via environment variable DIGITALOCEAN_API_TOKEN, if set.
 
 	APIToken string `mapstructure:"api_token" required:"true"`
-	APIURL   string `mapstructure:"api_url"`
+	// Non standard api endpoint URL. Set this if you are using a DigitalOcean API compatible service. It can also be specified via environment variable DIGITALOCEAN_API_URL.
+	APIURL   string `mapstructure:"api_url" required:"false"`
 
 	// The name (or slug) of the region to launch the droplet in. Consequently, this is the region where the snapshot will be available. See https://developers.digitalocean.com/documentation/v2/#list-all-regions for the accepted region names/slugs.
 
@@ -33,15 +34,23 @@ type Config struct {
 	// The name (or slug) of the base image to use. This is the image that will be used to launch a new droplet and provision it. See https://developers.digitalocean.com/documentation/v2/#list-all-images for details on how to get a list of the accepted image names/slugs.
 	Image  string `mapstructure:"image" required:"true"`
 
-	PrivateNetworking bool          `mapstructure:"private_networking"`
-	Monitoring        bool          `mapstructure:"monitoring"`
-	IPv6              bool          `mapstructure:"ipv6"`
-	SnapshotName      string        `mapstructure:"snapshot_name"`
+	// Set to true to enable private networking for the droplet being created. This defaults to false, or not enabled.
+
+	PrivateNetworking bool          `mapstructure:"private_networking" required:"false"`
+	// Set to true to enable monitoring for the droplet being created. This defaults to false, or not enabled.
+	Monitoring        bool          `mapstructure:"monitoring" required:"false"`
+	// Set to true to enable ipv6 for the droplet being created. This defaults to false, or not enabled.
+	IPv6              bool          `mapstructure:"ipv6" required:"false"`
+	// The name of the resulting snapshot that will appear in your account. Defaults to "packer-{{timestamp}}" (see configuration templates for more info).
+	SnapshotName      string        `mapstructure:"snapshot_name" required:"false"`
 	SnapshotRegions   []string      `mapstructure:"snapshot_regions"`
 	StateTimeout      time.Duration `mapstructure:"state_timeout"`
-	DropletName       string        `mapstructure:"droplet_name"`
-	UserData          string        `mapstructure:"user_data"`
-	UserDataFile      string        `mapstructure:"user_data_file"`
+	// The name assigned to the droplet. DigitalOcean sets the hostname of the machine to this value.
+	DropletName       string        `mapstructure:"droplet_name" required:"false"`
+	// User data to launch with the Droplet. Packer will not automatically wait for a user script to finish before shutting down the instance this must be handled in a provisioner.
+	UserData          string        `mapstructure:"user_data" required:"false"`
+	// Path to a file that will be used for the user data when launching the Droplet.
+	UserDataFile      string        `mapstructure:"user_data_file" required:"false"`
 	Tags              []string      `mapstructure:"tags"`
 
 	ctx interpolate.Context

@@ -30,9 +30,11 @@ type Config struct {
 	awscommon.AccessConfig    `mapstructure:",squash"`
 
 	ChrootMounts      [][]string                 `mapstructure:"chroot_mounts"`
-	CommandWrapper    string                     `mapstructure:"command_wrapper"`
+	// How to run shell commands. This defaults to {{.Command}}. This may be useful to set if you want to set environmental variables or perhaps run it with sudo or so on. This is a configuration template where the .Command variable is replaced with the command to be run. Defaults to {{.Command}}.
+	CommandWrapper    string                     `mapstructure:"command_wrapper" required:"false"`
 	CopyFiles         []string                   `mapstructure:"copy_files"`
-	DevicePath        string                     `mapstructure:"device_path"`
+	// The path to the device where the root volume of the source AMI will be attached. This defaults to "" (empty string), which forces Packer to find an open device automatically.
+	DevicePath        string                     `mapstructure:"device_path" required:"false"`
 	NVMEDevicePath    string                     `mapstructure:"nvme_device_path"`
 	FromScratch       bool                       `mapstructure:"from_scratch"`
 	MountOptions      []string                   `mapstructure:"mount_options"`
@@ -47,7 +49,8 @@ type Config struct {
 	SourceAmi         string                     `mapstructure:"source_ami" required:"true"`
 	SourceAmiFilter   awscommon.AmiFilterOptions `mapstructure:"source_ami_filter"`
 	RootVolumeTags    awscommon.TagMap           `mapstructure:"root_volume_tags"`
-	Architecture      string                     `mapstructure:"ami_architecture"`
+	// what architecture to use when registering the final AMI; valid options are "x86_64" or "arm64". Defaults to "x86_64".
+	Architecture      string                     `mapstructure:"ami_architecture" required:"false" required:"false"`
 
 	ctx interpolate.Context
 }

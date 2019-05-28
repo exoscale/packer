@@ -34,16 +34,22 @@ func (v *VaultAWSEngineOptions) Empty() bool {
 type AccessConfig struct {
 	// The access key used to communicate with AWS. Learn how to set this
 	AccessKey             string `mapstructure:"access_key" required:"true"`
-	CustomEndpointEc2     string `mapstructure:"custom_endpoint_ec2"`
-	DecodeAuthZMessages   bool   `mapstructure:"decode_authorization_messages"`
-	InsecureSkipTLSVerify bool   `mapstructure:"insecure_skip_tls_verify"`
-	MFACode               string `mapstructure:"mfa_code"`
-	ProfileName           string `mapstructure:"profile"`
+	// This option is useful if you use a cloud provider whose API is compatible with aws EC2. Specify another endpoint like this https://ec2.custom.endpoint.com.
+	CustomEndpointEc2     string `mapstructure:"custom_endpoint_ec2" required:"false" required:"false" required:"false" required:"false" required:"false"`
+	// Enable automatic decoding of any encoded authorization (error) messages using the sts:DecodeAuthorizationMessage API. Note: requires that the effective user/role have permissions to sts:DecodeAuthorizationMessage on resource *. Default false.
+	DecodeAuthZMessages   bool   `mapstructure:"decode_authorization_messages" required:"false" required:"false" required:"false" required:"false" required:"false"`
+	// This allows skipping TLS verification of the AWS EC2 endpoint. The default is false.
+	InsecureSkipTLSVerify bool   `mapstructure:"insecure_skip_tls_verify" required:"false" required:"false"`
+	// The MFA TOTP code. This should probably be a user variable since it changes all the time.
+	MFACode               string `mapstructure:"mfa_code" required:"false" required:"false"`
+	// The profile to use in the shared credentials file for AWS. See Amazon's documentation on specifying profiles for more details.
+	ProfileName           string `mapstructure:"profile" required:"false" required:"false"`
 	// The name of the region, such as us-east-1, in which to launch the EC2 instance to create the AMI.
 	RawRegion             string `mapstructure:"region" required:"true"`
 	// The secret key used to communicate with AWS. Learn how to set this
 	SecretKey             string `mapstructure:"secret_key" required:"true"`
-	SkipValidation        bool   `mapstructure:"skip_region_validation"`
+	// Set to true if you want to skip validation of the region configuration option. Defaults to false.
+	SkipValidation        bool   `mapstructure:"skip_region_validation" required:"false" required:"false"`
 	SkipMetadataApiCheck  bool   `mapstructure:"skip_metadata_api_check"`
 	Token                 string `mapstructure:"token"`
 	session               *session.Session

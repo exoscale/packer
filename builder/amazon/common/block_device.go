@@ -11,15 +11,23 @@ import (
 
 // BlockDevice
 type BlockDevice struct {
-	DeleteOnTermination bool   `mapstructure:"delete_on_termination"`
-	DeviceName          string `mapstructure:"device_name"`
+	// Indicates whether the EBS volume is deleted on instance termination. Default false. NOTE: If this value is not explicitly set to true and volumes are not cleaned up by an alternative method, additional volumes will accumulate after every build.
+	DeleteOnTermination bool   `mapstructure:"delete_on_termination" required:"false" required:"false" required:"false"`
+	// The device name exposed to the instance (for example, /dev/sdh or xvdh). Required for every device in the block device mapping.
+	DeviceName          string `mapstructure:"device_name" required:"false" required:"false" required:"false"`
 	Encrypted           *bool  `mapstructure:"encrypted"`
-	IOPS                int64  `mapstructure:"iops"`
-	NoDevice            bool   `mapstructure:"no_device"`
-	SnapshotId          string `mapstructure:"snapshot_id"`
-	VirtualName         string `mapstructure:"virtual_name"`
-	VolumeType          string `mapstructure:"volume_type"`
-	VolumeSize          int64  `mapstructure:"volume_size"`
+	// The number of I/O operations per second (IOPS) that the volume supports. See the documentation on IOPs for more information
+	IOPS                int64  `mapstructure:"iops" required:"false" required:"false" required:"false"`
+	// Suppresses the specified device included in the block device mapping of the AMI.
+	NoDevice            bool   `mapstructure:"no_device" required:"false" required:"false" required:"false"`
+	// The ID of the snapshot.
+	SnapshotId          string `mapstructure:"snapshot_id" required:"false" required:"false" required:"false"`
+	// The virtual device name. See the documentation on Block Device Mapping for more information.
+	VirtualName         string `mapstructure:"virtual_name" required:"false" required:"false" required:"false"`
+	// The volume type. gp2 for General Purpose (SSD) volumes, io1 for Provisioned IOPS (SSD) volumes, st1 for Throughput Optimized HDD, sc1 for Cold HDD, and standard for Magnetic volumes.
+	VolumeType          string `mapstructure:"volume_type" required:"false" required:"false" required:"false"`
+	// The size of the volume, in GiB. Required if not specifying a snapshot_id.
+	VolumeSize          int64  `mapstructure:"volume_size" required:"false" required:"false" required:"false"`
 	KmsKeyId            string `mapstructure:"kms_key_id"`
 	// ebssurrogate only
 	OmitFromArtifact bool `mapstructure:"omit_from_artifact"`

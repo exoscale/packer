@@ -34,11 +34,17 @@ type Config struct {
 	// The name of the server commercial type: ARM64-128GB, ARM64-16GB, ARM64-2GB, ARM64-32GB, ARM64-4GB, ARM64-64GB, ARM64-8GB, C1, C2L, C2M, C2S, START1-L, START1-M, START1-S, START1-XS, X64-120GB, X64-15GB, X64-30GB, X64-60GB
 	CommercialType string `mapstructure:"commercial_type" required:"true"`
 
-	SnapshotName string `mapstructure:"snapshot_name"`
-	ImageName    string `mapstructure:"image_name"`
-	ServerName   string `mapstructure:"server_name"`
-	Bootscript   string `mapstructure:"bootscript"`
-	BootType     string `mapstructure:"boottype"`
+	// The name of the resulting snapshot that will appear in your account. Default packer-TIMESTAMP
+
+	SnapshotName string `mapstructure:"snapshot_name" required:"false"`
+	// The name of the resulting image that will appear in your account. Default packer-TIMESTAMP
+	ImageName    string `mapstructure:"image_name" required:"false"`
+	// The name assigned to the server. Default packer-UUID
+	ServerName   string `mapstructure:"server_name" required:"false"`
+	// The id of an existing bootscript to use when booting the server.
+	Bootscript   string `mapstructure:"bootscript" required:"false"`
+	// The type of boot, can be either local or bootscript, Default bootscript
+	BootType     string `mapstructure:"boottype" required:"false"`
 
 	UserAgent string
 	ctx       interpolate.Context

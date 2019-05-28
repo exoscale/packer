@@ -18,8 +18,10 @@ type AlicloudAccessConfig struct {
 	AlicloudSecretKey      string `mapstructure:"secret_key" required:"true"`
 	// This is the Alicloud region. It must be provided, but it can also be sourced from the ALICLOUD_REGION environment variables.
 	AlicloudRegion         string `mapstructure:"region" required:"true"`
-	AlicloudSkipValidation bool   `mapstructure:"skip_region_validation"`
-	SecurityToken          string `mapstructure:"security_token"`
+	// The region validation can be skipped if this value is true, the default value is false.
+	AlicloudSkipValidation bool   `mapstructure:"skip_region_validation" required:"false"`
+	// STS access token, can be set through template or by exporting as environment variable such as export SecurityToken=value.
+	SecurityToken          string `mapstructure:"security_token" required:"false"`
 
 	client *ClientWrapper
 }
