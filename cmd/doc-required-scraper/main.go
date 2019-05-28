@@ -28,7 +28,7 @@ func main() {
 		e.Request.Visit(url)
 	})
 
-	c.OnHTML("#required- + ul a[name]", func(e *colly.HTMLElement) {
+	c.OnHTML("#optional- + ul a[name]", func(e *colly.HTMLElement) {
 
 		name := e.Attr("name")
 
@@ -53,7 +53,7 @@ func main() {
 			}
 			regex := regexp.MustCompile(fmt.Sprintf(`(\n\s+//.*)?\n(\s*)([A-Z]\w+\s+\w+\s+.*mapstructure:"%s")(\s+required:"true")?(.*)`, name))
 
-			replaced := regex.ReplaceAll(body, []byte("\n$2//"+text+"\n"+`$2$3 required:"true"$5`))
+			replaced := regex.ReplaceAll(body, []byte("\n$2//"+text+"\n"+`$2$3 required:"false"$5`))
 
 			if string(replaced) == string(body) {
 				return nil
