@@ -34,25 +34,32 @@ type Config struct {
 	Comm                communicator.Config `mapstructure:",squash"`
 
 	APIURL     string `mapstructure:"api_url"`
-	Token      string `mapstructure:"token"`
-	Project    string `mapstructure:"project"`
+	// The authentication token used to access your account. This can be either a session token or a service account token. If not defined, the builder will attempt to find it in the following order:
+	Token      string `mapstructure:"token" required:"true"`
+	// The id or name of the project. This field is required only if using session tokens. It should be skipped when using service account authentication.
+	Project    string `mapstructure:"project" required:"true"`
 	TokenLogin string `mapstructure:"token_login"`
 
 	StateTimeout time.Duration `mapstructure:"state_timeout"`
 
-	SourceImage      string                 `mapstructure:"source_image"`
+	// ID or name of the image to launch server from.
+
+	SourceImage      string                 `mapstructure:"source_image" required:"true"`
 	ImageName        string                 `mapstructure:"image_name"`
 	ImageDescription string                 `mapstructure:"image_description"`
 	ImageTags        map[string]interface{} `mapstructure:"image_tags"`
 	ImageService     string                 `mapstructure:"image_service"`
 
-	VmType string                 `mapstructure:"vm_type"`
+	// ID or name of the type this server should be created with.
+
+	VmType string                 `mapstructure:"vm_type" required:"true"`
 	VmName string                 `mapstructure:"vm_name"`
 	VmTags map[string]interface{} `mapstructure:"vm_tags"`
 
 	DiskName string  `mapstructure:"disk_name"`
 	DiskType string  `mapstructure:"disk_type"`
-	DiskSize float32 `mapstructure:"disk_size"`
+	// Size of the created disk, in GiB.
+	DiskSize float32 `mapstructure:"disk_size" required:"true"`
 
 	Network             string `mapstructure:"network"`
 	PrivateIP           string `mapstructure:"private_ip"`

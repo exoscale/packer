@@ -15,7 +15,8 @@ type Config struct {
 	OutputImage         string            `mapstructure:"output_image"`
 	ContainerName       string            `mapstructure:"container_name"`
 	CommandWrapper      string            `mapstructure:"command_wrapper"`
-	Image               string            `mapstructure:"image"`
+	// The source image to use when creating the build container. This can be a (local or remote) image (name or fingerprint). E.G. my-base-image, ubuntu-daily:x, 08fababf6f27, ...
+	Image               string            `mapstructure:"image" required:"true"`
 	Profile             string            `mapstructure:"profile"`
 	InitSleep           string            `mapstructure:"init_sleep"`
 	PublishProperties   map[string]string `mapstructure:"publish_properties"`

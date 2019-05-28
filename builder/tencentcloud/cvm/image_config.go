@@ -8,7 +8,8 @@ import (
 )
 
 type TencentCloudImageConfig struct {
-	ImageName          string   `mapstructure:"image_name"`
+	// The name you want to create your customize image, it should be composed of no more than 20 characters, of letters, numbers or minus sign.
+	ImageName          string   `mapstructure:"image_name" required:"true"`
 	ImageDescription   string   `mapstructure:"image_description"`
 	Reboot             bool     `mapstructure:"reboot"`
 	ForcePoweroff      bool     `mapstructure:"force_poweroff"`

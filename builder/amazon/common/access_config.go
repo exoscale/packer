@@ -32,14 +32,17 @@ func (v *VaultAWSEngineOptions) Empty() bool {
 
 // AccessConfig is for common configuration related to AWS access
 type AccessConfig struct {
-	AccessKey             string `mapstructure:"access_key"`
+	// The access key used to communicate with AWS. Learn how to set this
+	AccessKey             string `mapstructure:"access_key" required:"true"`
 	CustomEndpointEc2     string `mapstructure:"custom_endpoint_ec2"`
 	DecodeAuthZMessages   bool   `mapstructure:"decode_authorization_messages"`
 	InsecureSkipTLSVerify bool   `mapstructure:"insecure_skip_tls_verify"`
 	MFACode               string `mapstructure:"mfa_code"`
 	ProfileName           string `mapstructure:"profile"`
-	RawRegion             string `mapstructure:"region"`
-	SecretKey             string `mapstructure:"secret_key"`
+	// The name of the region, such as us-east-1, in which to launch the EC2 instance to create the AMI.
+	RawRegion             string `mapstructure:"region" required:"true"`
+	// The secret key used to communicate with AWS. Learn how to set this
+	SecretKey             string `mapstructure:"secret_key" required:"true"`
 	SkipValidation        bool   `mapstructure:"skip_region_validation"`
 	SkipMetadataApiCheck  bool   `mapstructure:"skip_metadata_api_check"`
 	Token                 string `mapstructure:"token"`

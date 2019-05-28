@@ -43,7 +43,8 @@ type Config struct {
 	RootDeviceName    string                     `mapstructure:"root_device_name"`
 	RootVolumeSize    int64                      `mapstructure:"root_volume_size"`
 	RootVolumeType    string                     `mapstructure:"root_volume_type"`
-	SourceAmi         string                     `mapstructure:"source_ami"`
+	// The source AMI whose root volume will be copied and provisioned on the currently running instance. This must be an EBS-backed AMI with a root volume snapshot that you have access to. Note: this is not used when from_scratch is set to true.
+	SourceAmi         string                     `mapstructure:"source_ami" required:"true"`
 	SourceAmiFilter   awscommon.AmiFilterOptions `mapstructure:"source_ami_filter"`
 	RootVolumeTags    awscommon.TagMap           `mapstructure:"root_volume_tags"`
 	Architecture      string                     `mapstructure:"ami_architecture"`

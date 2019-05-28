@@ -12,8 +12,10 @@ import (
 
 type TencentCloudRunConfig struct {
 	AssociatePublicIpAddress bool   `mapstructure:"associate_public_ip_address"`
-	SourceImageId            string `mapstructure:"source_image_id"`
-	InstanceType             string `mapstructure:"instance_type"`
+	// The base image id of Image you want to create your customized image from.
+	SourceImageId            string `mapstructure:"source_image_id" required:"true"`
+	// The instance type your cvm will be launched by. You should reference Instace Type  for parameter taking.
+	InstanceType             string `mapstructure:"instance_type" required:"true"`
 	InstanceName             string `mapstructure:"instance_name"`
 	DiskType                 string `mapstructure:"disk_type"`
 	DiskSize                 int64  `mapstructure:"disk_size"`

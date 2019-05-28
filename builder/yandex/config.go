@@ -27,9 +27,11 @@ type Config struct {
 	Communicator        communicator.Config `mapstructure:",squash"`
 
 	Endpoint              string `mapstructure:"endpoint"`
-	FolderID              string `mapstructure:"folder_id"`
+	// The folder ID that will be used to launch instances and store images. Alternatively you may set value by environment variable YC_FOLDER_ID.
+	FolderID              string `mapstructure:"folder_id" required:"true"`
 	ServiceAccountKeyFile string `mapstructure:"service_account_key_file"`
-	Token                 string `mapstructure:"token"`
+	// OAuth token to use to authenticate to Yandex.Cloud. Alternatively you may set value by environment variable YC_TOKEN.
+	Token                 string `mapstructure:"token" required:"true"`
 
 	DiskName            string            `mapstructure:"disk_name"`
 	DiskSizeGb          int               `mapstructure:"disk_size_gb"`
@@ -46,7 +48,8 @@ type Config struct {
 	PlatformID          string            `mapstructure:"platform_id"`
 	Metadata            map[string]string `mapstructure:"metadata"`
 	SerialLogFile       string            `mapstructure:"serial_log_file"`
-	SourceImageFamily   string            `mapstructure:"source_image_family"`
+	// The source image family to create the new image from. You can also specify source_image_id instead. Just one of a source_image_id or  source_image_family must be specified. Example: ubuntu-1804-lts
+	SourceImageFamily   string            `mapstructure:"source_image_family" required:"true"`
 	SourceImageFolderID string            `mapstructure:"source_image_folder_id"`
 	SourceImageID       string            `mapstructure:"source_image_id"`
 	SubnetID            string            `mapstructure:"subnet_id"`

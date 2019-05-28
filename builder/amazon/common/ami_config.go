@@ -10,7 +10,8 @@ import (
 
 // AMIConfig is for common configuration related to creating AMIs.
 type AMIConfig struct {
-	AMIName                 string            `mapstructure:"ami_name"`
+	// The name of the resulting AMI that will appear when managing AMIs in the AWS console or via APIs. This must be unique. To help make this unique, use a function like timestamp (see template engine for more info).
+	AMIName                 string            `mapstructure:"ami_name" required:"true"`
 	AMIDescription          string            `mapstructure:"ami_description"`
 	AMIVirtType             string            `mapstructure:"ami_virtualization_type"`
 	AMIUsers                []string          `mapstructure:"ami_users"`

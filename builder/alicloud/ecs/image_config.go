@@ -25,7 +25,8 @@ type AlicloudDiskDevices struct {
 }
 
 type AlicloudImageConfig struct {
-	AlicloudImageName                 string            `mapstructure:"image_name"`
+	// The name of the user-defined image, [2, 128] English or Chinese characters. It must begin with an uppercase/lowercase letter or a Chinese character, and may contain numbers, _ or -. It cannot begin with http:// or https://.
+	AlicloudImageName                 string            `mapstructure:"image_name" required:"true"`
 	AlicloudImageVersion              string            `mapstructure:"image_version"`
 	AlicloudImageDescription          string            `mapstructure:"image_description"`
 	AlicloudImageShareAccounts        []string          `mapstructure:"image_share_account"`

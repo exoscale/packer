@@ -30,7 +30,9 @@ type Config struct {
 	vboxcommon.VBoxVersionConfig    `mapstructure:",squash"`
 	vboxcommon.GuestAdditionsConfig `mapstructure:",squash"`
 
-	Checksum                string   `mapstructure:"checksum"`
+	// The checksum for the source_path file. The  algorithm to use when computing the checksum can be optionally specified  with checksum_type. When checksum_type is not set packer will guess the  checksumming type based on checksum length. checksum can be also be a  file or an URL, in which case checksum_type must be set to file; the  go-getter will download it and use the first hash found.
+
+	Checksum                string   `mapstructure:"checksum" required:"true"`
 	ChecksumType            string   `mapstructure:"checksum_type"`
 	GuestAdditionsMode      string   `mapstructure:"guest_additions_mode"`
 	GuestAdditionsPath      string   `mapstructure:"guest_additions_path"`
@@ -39,7 +41,8 @@ type Config struct {
 	GuestAdditionsURL       string   `mapstructure:"guest_additions_url"`
 	ImportFlags             []string `mapstructure:"import_flags"`
 	ImportOpts              string   `mapstructure:"import_opts"`
-	SourcePath              string   `mapstructure:"source_path"`
+	// The path to an OVF or OVA file that acts as the source of this build. This currently must be a local file.
+	SourcePath              string   `mapstructure:"source_path" required:"true"`
 	TargetPath              string   `mapstructure:"target_path"`
 	VMName                  string   `mapstructure:"vm_name"`
 	KeepRegistered          bool     `mapstructure:"keep_registered"`

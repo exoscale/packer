@@ -18,8 +18,10 @@ type Config struct {
 
 	AccessKey                         string `mapstructure:"access_key"`
 	SecretKey                         string `mapstructure:"secret_key"`
-	ServerImageProductCode            string `mapstructure:"server_image_product_code"`
-	ServerProductCode                 string `mapstructure:"server_product_code"`
+	// Product code of an image to create. (member_server_image_no is required if not specified)
+	ServerImageProductCode            string `mapstructure:"server_image_product_code" required:"true"`
+	// Product (spec) code to create.
+	ServerProductCode                 string `mapstructure:"server_product_code" required:"true"`
 	MemberServerImageNo               string `mapstructure:"member_server_image_no"`
 	ServerImageName                   string `mapstructure:"server_image_name"`
 	ServerImageDescription            string `mapstructure:"server_image_description"`

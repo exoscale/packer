@@ -17,7 +17,8 @@ const (
 
 // ToolsConfig contains the builder configuration related to Parallels Tools.
 type ToolsConfig struct {
-	ParallelsToolsFlavor    string `mapstructure:"parallels_tools_flavor"`
+	// The flavor of the Parallels Tools ISO to install into the VM. Valid values are "win", "lin", "mac", "os2" and "other". This can be omitted only if parallels_tools_mode is "disable".
+	ParallelsToolsFlavor    string `mapstructure:"parallels_tools_flavor" required:"true"`
 	ParallelsToolsGuestPath string `mapstructure:"parallels_tools_guest_path"`
 	ParallelsToolsMode      string `mapstructure:"parallels_tools_mode"`
 }

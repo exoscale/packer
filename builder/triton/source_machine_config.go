@@ -10,8 +10,10 @@ import (
 // the SDC API in order for provisioning to take place.
 type SourceMachineConfig struct {
 	MachineName            string             `mapstructure:"source_machine_name"`
-	MachinePackage         string             `mapstructure:"source_machine_package"`
-	MachineImage           string             `mapstructure:"source_machine_image"`
+	// The Triton package to use while building the image. Does not affect (and does not have to be the same) as the package which will be used for a VM instance running this image. On the Joyent public cloud this could for example be g3-standard-0.5-smartos.
+	MachinePackage         string             `mapstructure:"source_machine_package" required:"true"`
+	// The UUID of the image to base the new image on. Triton supports multiple types of images, called 'brands' in Triton / Joyent lingo, for contains and VM's. See the chapter Containers and virtual machines in the Joyent Triton documentation for detailed information. The following brands are currently supported by this builder:joyent andkvm. The choice of base image automatically decides the brand. On the Joyent public cloud a valid source_machine_image could for example be 70e3ae72-96b6-11e6-9056-9737fd4d0764 for version 16.3.1 of the 64bit SmartOS base image (a 'joyent' brand image). source_machine_image_filter can be used to populate this UUID.
+	MachineImage           string             `mapstructure:"source_machine_image" required:"true"`
 	MachineNetworks        []string           `mapstructure:"source_machine_networks"`
 	MachineMetadata        map[string]string  `mapstructure:"source_machine_metadata"`
 	MachineTags            map[string]string  `mapstructure:"source_machine_tags"`

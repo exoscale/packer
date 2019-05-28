@@ -20,12 +20,18 @@ type Config struct {
 	common.PackerConfig `mapstructure:",squash"`
 	Comm                communicator.Config `mapstructure:",squash"`
 
-	APIToken string `mapstructure:"api_token"`
+	// The client TOKEN to use to access your account. It can also be specified via environment variable DIGITALOCEAN_API_TOKEN, if set.
+
+	APIToken string `mapstructure:"api_token" required:"true"`
 	APIURL   string `mapstructure:"api_url"`
 
-	Region string `mapstructure:"region"`
-	Size   string `mapstructure:"size"`
-	Image  string `mapstructure:"image"`
+	// The name (or slug) of the region to launch the droplet in. Consequently, this is the region where the snapshot will be available. See https://developers.digitalocean.com/documentation/v2/#list-all-regions for the accepted region names/slugs.
+
+	Region string `mapstructure:"region" required:"true"`
+	// The name (or slug) of the droplet size to use. See https://developers.digitalocean.com/documentation/v2/#list-all-sizes for the accepted size names/slugs.
+	Size   string `mapstructure:"size" required:"true"`
+	// The name (or slug) of the base image to use. This is the image that will be used to launch a new droplet and provision it. See https://developers.digitalocean.com/documentation/v2/#list-all-images for details on how to get a list of the accepted image names/slugs.
+	Image  string `mapstructure:"image" required:"true"`
 
 	PrivateNetworking bool          `mapstructure:"private_networking"`
 	Monitoring        bool          `mapstructure:"monitoring"`

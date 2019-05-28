@@ -85,11 +85,12 @@ type Config struct {
 
 	// Shared Gallery
 	SharedGallery SharedImageGallery `mapstructure:"shared_image_gallery"`
-
-	// Compute
-	ImagePublisher string `mapstructure:"image_publisher"`
-	ImageOffer     string `mapstructure:"image_offer"`
-	ImageSku       string `mapstructure:"image_sku"`
+	// PublisherName for your base image. See documentation for details.
+	ImagePublisher string `mapstructure:"image_publisher" required:"true"`
+	// Offer for your base image. See documentation for details.
+	ImageOffer     string `mapstructure:"image_offer" required:"true"`
+	// SKU for your base image. See documentation for details.
+	ImageSku       string `mapstructure:"image_sku" required:"true"`
 	ImageVersion   string `mapstructure:"image_version"`
 	ImageUrl       string `mapstructure:"image_url"`
 

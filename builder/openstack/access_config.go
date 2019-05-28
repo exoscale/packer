@@ -16,10 +16,13 @@ import (
 
 // AccessConfig is for common configuration related to openstack access
 type AccessConfig struct {
-	Username                    string `mapstructure:"username"`
+	// The username or id used to connect to the OpenStack service. If not specified, Packer will use the environment variable OS_USERNAME or OS_USERID, if set. This is not required if using access token or application credential instead of password, or if using cloud.yaml.
+	Username                    string `mapstructure:"username" required:"true"`
 	UserID                      string `mapstructure:"user_id"`
-	Password                    string `mapstructure:"password"`
-	IdentityEndpoint            string `mapstructure:"identity_endpoint"`
+	// The password used to connect to the OpenStack service. If not specified, Packer will use the environment variables OS_PASSWORD, if set. This is not required if using access token or application credential instead of password, or if using cloud.yaml.
+	Password                    string `mapstructure:"password" required:"true"`
+	// The URL to the OpenStack Identity service. If not specified, Packer will use the environment variables OS_AUTH_URL, if set. This is not required if using cloud.yaml.
+	IdentityEndpoint            string `mapstructure:"identity_endpoint" required:"true"`
 	TenantID                    string `mapstructure:"tenant_id"`
 	TenantName                  string `mapstructure:"tenant_name"`
 	DomainID                    string `mapstructure:"domain_id"`

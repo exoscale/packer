@@ -15,10 +15,15 @@ import (
 type RunConfig struct {
 	Comm communicator.Config `mapstructure:",squash"`
 
-	SourceImage        string            `mapstructure:"source_image"`
-	SourceImageName    string            `mapstructure:"source_image_name"`
-	SourceImageFilters ImageFilter       `mapstructure:"source_image_filter"`
-	Flavor             string            `mapstructure:"flavor"`
+	// The ID or full URL to the base image to use. This is the image that will be used to launch a new server and provision it. Unless you specify completely custom SSH settings, the source image must have cloud-init installed so that the keypair gets assigned properly.
+
+	SourceImage        string            `mapstructure:"source_image" required:"true"`
+	// The name of the base image to use. This is an alternative way of providing source_image and only either of them can be specified.
+	SourceImageName    string            `mapstructure:"source_image_name" required:"true"`
+	// The search filters for determining the base image to use. This is an alternative way of providing source_image and only one of these methods can be used. source_image will override the filters.
+	SourceImageFilters ImageFilter       `mapstructure:"source_image_filter" required:"true"`
+	// The ID, name, or full URL for the desired flavor for the server to be created.
+	Flavor             string            `mapstructure:"flavor" required:"true"`
 	AvailabilityZone   string            `mapstructure:"availability_zone"`
 	RackconnectWait    bool              `mapstructure:"rackconnect_wait"`
 	FloatingIPNetwork  string            `mapstructure:"floating_ip_network"`

@@ -25,7 +25,9 @@ type Config struct {
 	bootcommand.BootConfig              `mapstructure:",squash"`
 	parallelscommon.ToolsConfig         `mapstructure:",squash"`
 
-	SourcePath     string `mapstructure:"source_path"`
+	// The path to a PVM directory that acts as the source of this build.
+
+	SourcePath     string `mapstructure:"source_path" required:"true"`
 	SkipCompaction bool   `mapstructure:"skip_compaction"`
 	VMName         string `mapstructure:"vm_name"`
 	ReassignMAC    bool   `mapstructure:"reassign_mac"`

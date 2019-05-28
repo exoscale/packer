@@ -31,14 +31,19 @@ type Config struct {
 	awscommon.BlockDevices `mapstructure:",squash"`
 	awscommon.RunConfig    `mapstructure:",squash"`
 
-	AccountId           string `mapstructure:"account_id"`
+	// Your AWS account ID. This is required for bundling the AMI. This is not the same as the access key. You can find your account ID in the security credentials page of your AWS account.
+
+	AccountId           string `mapstructure:"account_id" required:"true"`
 	BundleDestination   string `mapstructure:"bundle_destination"`
 	BundlePrefix        string `mapstructure:"bundle_prefix"`
 	BundleUploadCommand string `mapstructure:"bundle_upload_command"`
 	BundleVolCommand    string `mapstructure:"bundle_vol_command"`
-	S3Bucket            string `mapstructure:"s3_bucket"`
-	X509CertPath        string `mapstructure:"x509_cert_path"`
-	X509KeyPath         string `mapstructure:"x509_key_path"`
+	// The name of the S3 bucket to upload the AMI. This bucket will be created if it doesn't exist.
+	S3Bucket            string `mapstructure:"s3_bucket" required:"true"`
+	// The local path to a valid X509 certificate for your AWS account. This is used for bundling the AMI. This X509 certificate must be registered with your account from the security credentials page in the AWS console.
+	X509CertPath        string `mapstructure:"x509_cert_path" required:"true"`
+	// The local path to the private key for the X509 certificate specified by x509_cert_path. This is used for bundling the AMI.
+	X509KeyPath         string `mapstructure:"x509_key_path" required:"true"`
 	X509UploadPath      string `mapstructure:"x509_upload_path"`
 
 	ctx interpolate.Context

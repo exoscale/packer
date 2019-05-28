@@ -18,9 +18,11 @@ import (
 // AccessConfig is for common configuration related to Triton access
 type AccessConfig struct {
 	Endpoint              string `mapstructure:"triton_url"`
-	Account               string `mapstructure:"triton_account"`
+	// The username of the Triton account to use when using the Triton Cloud API.
+	Account               string `mapstructure:"triton_account" required:"true"`
 	Username              string `mapstructure:"triton_user"`
-	KeyID                 string `mapstructure:"triton_key_id"`
+	// The fingerprint of the public key of the SSH key pair to use for authentication with the Triton Cloud API. If triton_key_material is not set, it is assumed that the SSH agent has the private key corresponding to this key ID loaded.
+	KeyID                 string `mapstructure:"triton_key_id" required:"true"`
 	KeyMaterial           string `mapstructure:"triton_key_material"`
 	InsecureSkipTLSVerify bool   `mapstructure:"insecure_skip_tls_verify"`
 

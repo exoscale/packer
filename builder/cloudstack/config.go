@@ -20,9 +20,13 @@ type Config struct {
 	common.HTTPConfig   `mapstructure:",squash"`
 	Comm                communicator.Config `mapstructure:",squash"`
 
-	APIURL       string        `mapstructure:"api_url"`
-	APIKey       string        `mapstructure:"api_key"`
-	SecretKey    string        `mapstructure:"secret_key"`
+	// The CloudStack API endpoint we will connect to. It can also be specified via environment variable CLOUDSTACK_API_URL, if set.
+
+	APIURL       string        `mapstructure:"api_url" required:"true"`
+	// The API key used to sign all API requests. It can also be specified via environment variable CLOUDSTACK_API_KEY, if set.
+	APIKey       string        `mapstructure:"api_key" required:"true"`
+	// The secret key used to sign all API requests. It can also be specified via environment variable CLOUDSTACK_SECRET_KEY, if set.
+	SecretKey    string        `mapstructure:"secret_key" required:"true"`
 	AsyncTimeout time.Duration `mapstructure:"async_timeout"`
 	HTTPGetOnly  bool          `mapstructure:"http_get_only"`
 	SSLNoVerify  bool          `mapstructure:"ssl_no_verify"`
@@ -34,24 +38,30 @@ type Config struct {
 	Expunge                bool     `mapstructure:"expunge"`
 	Hypervisor             string   `mapstructure:"hypervisor"`
 	InstanceName           string   `mapstructure:"instance_name"`
-	Network                string   `mapstructure:"network"`
+	// The name or ID of the network to connect the instance to.
+	Network                string   `mapstructure:"network" required:"true"`
 	Project                string   `mapstructure:"project"`
 	PublicIPAddress        string   `mapstructure:"public_ip_address"`
 	PublicPort             int      `mapstructure:"public_port"`
 	SecurityGroups         []string `mapstructure:"security_groups"`
-	ServiceOffering        string   `mapstructure:"service_offering"`
+	// The name or ID of the service offering used for the instance.
+	ServiceOffering        string   `mapstructure:"service_offering" required:"true"`
 	PreventFirewallChanges bool     `mapstructure:"prevent_firewall_changes"`
-	SourceISO              string   `mapstructure:"source_iso"`
-	SourceTemplate         string   `mapstructure:"source_template"`
+	// The name or ID of an ISO that will be mounted before booting the instance. This option is mutually exclusive with source_template. When using source_iso, both disk_offering and hypervisor are required.
+	SourceISO              string   `mapstructure:"source_iso" required:"true"`
+	// The name or ID of the template used as base template for the instance. This option is mutually exclusive with source_iso.
+	SourceTemplate         string   `mapstructure:"source_template" required:"true"`
 	TemporaryKeypairName   string   `mapstructure:"temporary_keypair_name"`
 	UseLocalIPAddress      bool     `mapstructure:"use_local_ip_address"`
 	UserData               string   `mapstructure:"user_data"`
 	UserDataFile           string   `mapstructure:"user_data_file"`
-	Zone                   string   `mapstructure:"zone"`
+	// The name or ID of the zone where the instance will be created.
+	Zone                   string   `mapstructure:"zone" required:"true"`
 
 	TemplateName            string `mapstructure:"template_name"`
 	TemplateDisplayText     string `mapstructure:"template_display_text"`
-	TemplateOS              string `mapstructure:"template_os"`
+	// The name or ID of the template OS for the new template that will be created.
+	TemplateOS              string `mapstructure:"template_os" required:"true"`
 	TemplateFeatured        bool   `mapstructure:"template_featured"`
 	TemplatePublic          bool   `mapstructure:"template_public"`
 	TemplatePasswordEnabled bool   `mapstructure:"template_password_enabled"`

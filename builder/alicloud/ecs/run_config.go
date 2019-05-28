@@ -15,9 +15,11 @@ type RunConfig struct {
 	AssociatePublicIpAddress bool   `mapstructure:"associate_public_ip_address"`
 	ZoneId                   string `mapstructure:"zone_id"`
 	IOOptimized              bool   `mapstructure:"io_optimized"`
-	InstanceType             string `mapstructure:"instance_type"`
+	// Type of the instance. For values, see Instance Type Table. You can also obtain the latest instance type table by invoking the Querying Instance Type Table interface.
+	InstanceType             string `mapstructure:"instance_type" required:"true"`
 	Description              string `mapstructure:"description"`
-	AlicloudSourceImage      string `mapstructure:"source_image"`
+	// This is the base image id which you want to create your customized images.
+	AlicloudSourceImage      string `mapstructure:"source_image" required:"true"`
 	ForceStopInstance        bool   `mapstructure:"force_stop_instance"`
 	DisableStopInstance      bool   `mapstructure:"disable_stop_instance"`
 	SecurityGroupId          string `mapstructure:"security_group_id"`

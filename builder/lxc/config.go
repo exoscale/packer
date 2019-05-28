@@ -14,7 +14,8 @@ import (
 
 type Config struct {
 	common.PackerConfig `mapstructure:",squash"`
-	ConfigFile          string   `mapstructure:"config_file"`
+	// The path to the lxc configuration file.
+	ConfigFile          string   `mapstructure:"config_file" required:"true"`
 	OutputDir           string   `mapstructure:"output_directory"`
 	ContainerName       string   `mapstructure:"container_name"`
 	CommandWrapper      string   `mapstructure:"command_wrapper"`
@@ -22,7 +23,8 @@ type Config struct {
 	CreateOptions       []string `mapstructure:"create_options"`
 	StartOptions        []string `mapstructure:"start_options"`
 	AttachOptions       []string `mapstructure:"attach_options"`
-	Name                string   `mapstructure:"template_name"`
+	// The LXC template name to use.
+	Name                string   `mapstructure:"template_name" required:"true"`
 	Parameters          []string `mapstructure:"template_parameters"`
 	EnvVars             []string `mapstructure:"template_environment_vars"`
 	TargetRunlevel      int      `mapstructure:"target_runlevel"`

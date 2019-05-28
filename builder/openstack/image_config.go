@@ -10,7 +10,8 @@ import (
 
 // ImageConfig is for common configuration related to creating Images.
 type ImageConfig struct {
-	ImageName       string                       `mapstructure:"image_name"`
+	// The name of the resulting image.
+	ImageName       string                       `mapstructure:"image_name" required:"true"`
 	ImageMetadata   map[string]string            `mapstructure:"metadata"`
 	ImageVisibility imageservice.ImageVisibility `mapstructure:"image_visibility"`
 	ImageMembers    []string                     `mapstructure:"image_members"`

@@ -66,12 +66,14 @@ type RunConfig struct {
 	EnableT2Unlimited                 bool                       `mapstructure:"enable_t2_unlimited"`
 	IamInstanceProfile                string                     `mapstructure:"iam_instance_profile"`
 	InstanceInitiatedShutdownBehavior string                     `mapstructure:"shutdown_behavior"`
-	InstanceType                      string                     `mapstructure:"instance_type"`
+	// The EC2 instance type to use while building the AMI, such as t2.small.
+	InstanceType                      string                     `mapstructure:"instance_type" required:"true"`
 	SecurityGroupFilter               SecurityGroupFilterOptions `mapstructure:"security_group_filter"`
 	RunTags                           map[string]string          `mapstructure:"run_tags"`
 	SecurityGroupId                   string                     `mapstructure:"security_group_id"`
 	SecurityGroupIds                  []string                   `mapstructure:"security_group_ids"`
-	SourceAmi                         string                     `mapstructure:"source_ami"`
+	// The source AMI whose root volume will be copied and provisioned on the currently running instance. This must be an EBS-backed AMI with a root volume snapshot that you have access to. Note: this is not used when from_scratch is set to true.
+	SourceAmi                         string                     `mapstructure:"source_ami" required:"true"`
 	SourceAmiFilter                   AmiFilterOptions           `mapstructure:"source_ami_filter"`
 	SpotInstanceTypes                 []string                   `mapstructure:"spot_instance_types"`
 	SpotPrice                         string                     `mapstructure:"spot_price"`
